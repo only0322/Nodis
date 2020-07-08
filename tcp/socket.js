@@ -4,7 +4,9 @@ class Socket {
     constructor() {
         
     }
-    init (ip,port) {
+    init () {
+        let ip = instance.ini.main.ip;
+        let port = instance.ini.main.port;
         this.server = new net.createServer();
         this.server.on('connection', async(client) => {
 

@@ -22,8 +22,9 @@ class Socket {
 
                 switch (type) {
                     case 1000:
-                        //读写Json创建新的连接
-                        client.write("hello world!");
+                        //注册
+                        
+                        
                         break;
                     case 1001:
                         client.write("hello world!");

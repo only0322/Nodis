@@ -1,5 +1,6 @@
 const net = require('net')
-
+const crypto = require('crypto');
+const tools = require('../tools/tools');
 class Socket {
     constructor() {
         
@@ -18,20 +19,30 @@ class Socket {
                // resValue = iconv.decode(msg,'utf8');
                 console.log(`客户端发来一个信息：${resValue}`);
                 console.log("resValue.type = ",resValue.type);
-                let type = parseInt(resValue.type);       //与客户端预先定义接口
-
+                let type = resValue.type.toString();       //与客户端预先定义接口
+                let res = {};
+                res.type = type;
+                type = type.toLowerCase();  //直接转成小写 不管客户端发送是否有问题
+                
                 switch (type) {
-                    case 1000:
-                        //注册
-                        
+                    case "ping":
+                        //版本查询
+                        res.value = "Nodis "+instance.ini.Nodis.version;
+                        console.log("返回值为",res);
                         
                         break;
-                    case 1001:
-                        client.write("hello world!");
+                    case "check":
+                        console.log("resValue.password = ",resValue.password);
+                        let result = await instance.tcpHandler.checkMd5(resValue.password);
+                        res.value = result;
+                        break;
+                    case "put":
+                        
+                        break;
                     default:
                         break;
                 }
-                
+                client.write(JSON.stringify(res));
 
                 
             });
@@ -52,6 +63,8 @@ class Socket {
           });
 
     }
+
+    
     
 }
 

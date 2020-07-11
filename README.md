@@ -11,13 +11,13 @@
 
 ### 1.检查版本 
 
-```json
+```js
 type:"ping"
 ```
 
 ### 2.检查权限
 
-```json
+```js
 type:"check"
 password:"password"
 ```

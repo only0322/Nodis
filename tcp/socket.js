@@ -24,7 +24,7 @@ class Socket {
                 let res = {};
                 res.type = type;
                 type = type.toLowerCase();  //直接转成小写 不管客户端发送是否有问题
-                
+                let result = null;
                 switch (type) {
                     case "ping":
                         //版本查询
@@ -34,21 +34,31 @@ class Socket {
                         break;
                     case "check":
                         console.log("resValue.password = ",resValue.password);
-                        let result = await instance.tcpHandler.checkMd5(resValue.password);
+                        result = await instance.tcpHandler.checkMd5(resValue.password);
                         res.value = result;
                         break;
                     case "add":
-                        let result = await instance.tcpHandler.addNodis(resValue.key,resValue.value);
+                        result = await instance.tcpHandler.addNodis(resValue.key,resValue.value,resValue.password);
+                        res.value  = result.value;
+                        res.remark = result.remark;
                         break;
 
                     case "get":
-
+                        
                         break;
 
                     case "find":
                         break;
                     
+                    case "getall":
+                        result = await instance.tcpHandler.getAll(resValue.password);
+                        res.result = result.result;
+                        res.value = result.value;
+                        break;
                     default:
+                        res.result = false;
+                        res.remark = "unknown command";
+
                         break;
                 }
                 client.write(JSON.stringify(res));

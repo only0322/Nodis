@@ -38,8 +38,9 @@ value:true
 
 ```js
 type:"add"
-key:["a","b","c"]       //a.b.c = value
+key:"key"       
 value:"value"
+password:"password"
 ```
 
 ```js
@@ -52,24 +53,44 @@ value:true
 
 ```js
 type:"get"
-key:["a","b","c"]   //获取a.b.c
+key:"key"
+password:"password"
 ```
 
 ```js
 return 
 type:"get"
 value:"json"
+result:"true"
+remark:"remark"
 ```
 
 ### 5.寻找元素是否存在
 
 ```js
 type:"find"
-key:["a","b","c"]   //判断a.b.c是否存在
+key:"key"
+password:"password"
 ```
 
 ```js
 return
 type:"find"
 value:true
+remark:"remark"
 ```
+
+
+### 6.获得所有的Nodis缓存内容
+```js
+type:"getAll"
+password:"password"
+result:"true"
+remark:"remark"
+```
+
+```js
+return
+type:"getAll"
+result:"true"
+value:"value"

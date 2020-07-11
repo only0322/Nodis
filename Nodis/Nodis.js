@@ -2,7 +2,7 @@ const moment = require('moment')
 
 class Nodis{
     constructor() {
-        
+        this.cache = {};    //缓存
     }
 }
 

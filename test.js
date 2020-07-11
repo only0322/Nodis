@@ -18,16 +18,18 @@ async function init() {
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
         let send = {
-            type:"check",
+            type:"getall",
             password:"123456",
+            key:"123",
+            value:"hello"
         }
         client.write(JSON.stringify(send));
         
     });
 
     client.on('data', function (data) {
-        data = JSON.parse(data)
-        console.log('已接受服务器端发送的数据：' + data.value);
+        data = JSON.parse(JSON.stringify(data))
+        console.log('已接受服务器端发送的数据：' + data);
     });
 
     //监听与服务端连接的错误事件

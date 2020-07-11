@@ -1,6 +1,7 @@
 const net = require('net')
 const crypto = require('crypto');
 const tools = require('../tools/tools');
+const { readv } = require('fs');
 class Socket {
     constructor() {
         
@@ -36,9 +37,17 @@ class Socket {
                         let result = await instance.tcpHandler.checkMd5(resValue.password);
                         res.value = result;
                         break;
-                    case "put":
-                        
+                    case "add":
+                        let result = await instance.tcpHandler.addNodis(resValue.key,resValue.value);
                         break;
+
+                    case "get":
+
+                        break;
+
+                    case "find":
+                        break;
+                    
                     default:
                         break;
                 }

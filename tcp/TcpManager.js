@@ -16,6 +16,10 @@ class TcpManager {
             return false;
         }
     }
+
+    async addNodis(key,value) {
+        
+    }
 }
 
 module.exports = TcpManager;

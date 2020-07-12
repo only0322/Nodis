@@ -62,6 +62,62 @@ class TcpManager {
         console.log("res = ",res);
         return res;
     }
+
+    //获取键值
+    async getNodis(key,password) {
+        let res = {};
+        if(!this.checkMd5(password))
+        {
+            res.result = false;
+            res.remark = "permission denied";
+            res.value = null;
+        }
+        else
+        {
+            if(!instance.nodis.cache[key])
+            {
+                res.result = false;
+                res.remark = "key not found";
+                res.value = null;
+            }
+            else
+            {
+                res.result = true;
+                res.remark = "success";
+                res.value = instance.nodis.cache[key];
+            }
+        }
+        console.log("res = ",res);
+        return res;
+    }
+
+
+    //判断键值是否存在
+    async findNodis(key,password) {
+        let res = {};
+        if(!this.checkMd5(password))
+        {
+            res.result = false;
+            res.remark = "permission denied";
+        }
+        else
+        {
+            if(!instance.nodis.cache[key])
+            {
+                res.result = false;
+                res.remark = "key not found";
+
+            }
+            else
+            {
+                res.result = true;
+                res.remark = "success";
+
+            }
+        }
+        console.log("res = ",res);
+        return res;
+    }
 }
 
 module.exports = TcpManager;

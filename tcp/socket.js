@@ -44,10 +44,17 @@ class Socket {
                         break;
 
                     case "get":
-                        
+                        result = await instance.tcpHandler.getNodis(resValue.key,resValue.password);
+                        res.result = result.result;
+                        res.value = result.value;
+                        res.remark = result.remark;
                         break;
 
                     case "find":
+                        result = await instance.tcpHandler.findNodis(resValue.key,resValue.password);
+                        res.result = result.result;
+                        res.remark = result.remark;
+
                         break;
                     
                     case "getall":

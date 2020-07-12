@@ -18,7 +18,7 @@ async function init() {
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
         let send = {
-            type:"getall",
+            type:"get",
             password:"123456",
             key:"123",
             value:"hello"

@@ -4,6 +4,12 @@ class UseNodis {
     constructor() {
         
     }
+
+
+    //ping
+    async ping() {
+        
+    }
 }
 
 module.exports = UseNodis;

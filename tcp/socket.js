@@ -37,20 +37,20 @@ class Socket {
                         result = await instance.tcpHandler.checkMd5(resValue.password);
                         res.value = result;
                         break;
-                    case "add":
+                    case "addkey":
                         result = await instance.tcpHandler.addNodis(resValue.key,resValue.value,resValue.password);
                         res.value  = result.value;
                         res.remark = result.remark;
                         break;
 
-                    case "get":
+                    case "getkey":
                         result = await instance.tcpHandler.getNodis(resValue.key,resValue.password);
                         res.result = result.result;
                         res.value = result.value;
                         res.remark = result.remark;
                         break;
 
-                    case "find":
+                    case "findkey":
                         result = await instance.tcpHandler.findNodis(resValue.key,resValue.password);
                         res.result = result.result;
                         res.remark = result.remark;
@@ -62,6 +62,10 @@ class Socket {
                         res.result = result.result;
                         res.value = result.value;
                         break;
+                    case "raise":
+                        result = await instance.tcpHandler.raise(resValue.key,resValue.value,resValue.password);
+                        res.result = result.result;
+                        res.remark = result.remark;
                     default:
                         res.result = false;
                         res.remark = "unknown command";

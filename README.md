@@ -37,7 +37,7 @@ value:true
 ### 3.存入缓存
 
 ```js
-type:"add"
+type:"addkey"
 key:"key"       
 value:"value"
 password:"password"
@@ -45,21 +45,21 @@ password:"password"
 
 ```js
 return
-type:"add"
+type:"addkey"
 value:true
 ```
 
 ### 4.获取元素
 
 ```js
-type:"get"
+type:"getkey"
 key:"key"
 password:"password"
 ```
 
 ```js
 return 
-type:"get"
+type:"getkey"
 value:"json"
 result:"true"
 remark:"remark"
@@ -68,14 +68,14 @@ remark:"remark"
 ### 5.寻找元素是否存在
 
 ```js
-type:"find"
+type:"findkey"
 key:"key"
 password:"password"
 ```
 
 ```js
 return
-type:"find"
+type:"findkey"
 value:true
 remark:"remark"
 ```

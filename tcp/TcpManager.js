@@ -118,6 +118,29 @@ class TcpManager {
         console.log("res = ",res);
         return res;
     }
+
+    //增加某个键值的值
+    async raise(key,value,password) {
+        let res = {};
+        if(!this.checkMd5(password))
+        {
+            res.result = false;
+            res.remark = "permission denied";
+        }
+        else
+        {
+            let temp = instance.nodis.cache[key];
+            if(!temp)
+            {
+                res.result = false;
+                res.remark = "key not found";
+            }
+            else
+            {
+                
+            }
+        }
+    }
 }
 
 module.exports = TcpManager;

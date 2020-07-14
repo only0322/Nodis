@@ -5,6 +5,10 @@ class UseNodis {
         
     }
 
+    //用之前先初始化
+    async init(ini) {
+        this.ini = ini;
+    }
 
     //ping
     async ping() {

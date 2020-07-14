@@ -17,19 +17,19 @@ const errCode = {
         text : "success"
     },
     "auth" : {
-        code : 1,
+        code : 530,
         text : "permission denied"
     },
     "none" : {
-        code : 500,
+        code : 404,
         text : "key not found",
     },
     "exist" : {
-        code : 504,
+        code : 500,
         text : "key already existed"
     },
     "NaN" : {
-        code : 2,
+        code : 200,
         text : "not a number"
     },
 

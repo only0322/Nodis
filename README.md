@@ -31,7 +31,7 @@ password:"password"
 ```js
 return
 type:"check"
-value:true
+value:code
 ```
 
 ### 3.存入缓存
@@ -46,7 +46,7 @@ password:"password"
 ```js
 return
 type:"addkey"
-value:true
+value:code
 ```
 
 ### 4.获取元素
@@ -61,7 +61,7 @@ password:"password"
 return 
 type:"getkey"
 value:"json"
-result:"true"
+result:"code"
 remark:"remark"
 ```
 
@@ -76,7 +76,7 @@ password:"password"
 ```js
 return
 type:"findkey"
-value:true
+value:code
 remark:"remark"
 ```
 
@@ -85,12 +85,47 @@ remark:"remark"
 ```js
 type:"getAll"
 password:"password"
-result:"true"
 remark:"remark"
 ```
 
 ```js
 return
 type:"getAll"
-result:"true"
+result:"code"
 value:"value"
+```
+
+
+### 7.增加某个key的值
+
+```js
+type:"raise"
+password:"password"
+key:"key"
+value:"value"
+```
+
+```js
+return
+type:"raise"
+result:"code"
+remark:"remark"
+```
+
+
+### 8.增减少某个key的值
+
+```js
+type:"reduce"
+password:"password"
+key:"key"
+value:"value"
+```
+
+```js
+return
+type:"reduce"
+result:"code"
+remark:"remark"
+```
+

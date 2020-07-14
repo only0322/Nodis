@@ -1,5 +1,6 @@
 const moment = require('moment')
 const tools = require('../tools/tools');
+const NoDefine = require('../tools/define');
 class TcpManager {
     constructor() {
         

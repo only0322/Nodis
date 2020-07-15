@@ -66,7 +66,13 @@ class Socket {
                         break;
                     case "raise":
                         result = await instance.tcpHandler.raise(resValue.key,resValue.value,resValue.password);
-                        console.log("raise result - ",result);
+
+                        res.result = result.result;
+                        res.remark = result.remark;
+                        break;
+                    case "reduce":
+                        result = await instance.tcpHandler.reduce(resValue.key,resValue.value,resValue.password);
+
                         res.result = result.result;
                         res.remark = result.remark;
                         break;

@@ -59,12 +59,12 @@ class TcpManager {
         if(!this.checkMd5(password))
         {
             res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].text;
         }
         else
         {
             res.result = NoDefine.errCode["succ"].code;
-            res.remark = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
             res.value = instance.nodis.cache;
         }
         console.log("res = ",res);
@@ -77,7 +77,7 @@ class TcpManager {
         if(!this.checkMd5(password))
         {
             res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].text;
             res.value = null;
         }
         else
@@ -85,13 +85,13 @@ class TcpManager {
             if(!instance.nodis.cache[key])
             {
                 res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].text;
                 res.value = null;
             }
             else
             {
                 res.result = NoDefine.errCode["succ"].code;
-                res.remark = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].text;
                 res.value = instance.nodis.cache[key];
             }
         }
@@ -106,20 +106,20 @@ class TcpManager {
         if(!this.checkMd5(password))
         {
             res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].text;
         }
         else
         {
             if(!instance.nodis.cache[key])
             {
                 res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].text;
 
             }
             else
             {
                 res.result = NoDefine.errCode["succ"].code;
-                res.remark = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].text;
 
             }
         }
@@ -133,7 +133,7 @@ class TcpManager {
         if(!this.checkMd5(password))
         {
             res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].remark;
+            res.remark = NoDefine.errCode["auth"].text;
         }
         else
         {
@@ -141,26 +141,61 @@ class TcpManager {
             if(!temp)
             {
                 res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].remark;
+                res.remark = NoDefine.errCode["none"].text;
             }
             else
             {
                 if(isNaN(instance.nodis.cache[key]))
                 {
                     res.result = NoDefine.errCode["NaN"].code;
-                    res.remark = NoDefine.errCode["NaN"].remark;
+                    res.remark = NoDefine.errCode["NaN"].text;
                 }
                 else
                 {
-                    instance.nodis.cache[key] += value;
+                    instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) + parseFloat(value);
                     res.result = NoDefine.errCode["succ"].code;
-                    res.remark = NoDefine.errCode["succ"].remark;
+                    res.remark = NoDefine.errCode["succ"].text;
+                }
+            }
+        }
+        return res;
+    }
+
+    //减少某个键值的值
+    async reduce(key,value,password) {
+        let res = {};
+        if(!this.checkMd5(password))
+        {
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].text;
+        }
+        else
+        {
+            let temp = instance.nodis.cache[key];
+            if(!temp)
+            {
+                res.result = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].text;
+            }
+            else
+            {
+                if(isNaN(instance.nodis.cache[key]))
+                {
+                    res.result = NoDefine.errCode["NaN"].code;
+                    res.remark = NoDefine.errCode["NaN"].text;
+                }
+                else
+                {
+                    instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) - parseFloat(value);
+                    res.result = NoDefine.errCode["succ"].code;
+                    res.remark = NoDefine.errCode["succ"].text;
                 }
             }
         }
         return res;
     }
 }
+
 
 module.exports = TcpManager;
 

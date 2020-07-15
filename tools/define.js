@@ -3,11 +3,11 @@ let type = os.platform();
 let fileName = null;
 if(type == "win32")
 {
-    fileName = "E:/gitee/Nodis/Nodis.ini";
+    fileName = instance.ini.logPathWin;
 }
 else
 {
-    fileName = "/Users/hideyoshi/Desktop/codes/Nodis/Nodis.ini";
+    fileName = instance.ini.logPathMac;
 }
 
 

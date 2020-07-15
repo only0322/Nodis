@@ -32,6 +32,10 @@ const errCode = {
         code : 200,
         text : "not a number"
     },
+    "unknown" : {
+        code : 3,
+        text: "unknown command",
+    }
 
 }
 

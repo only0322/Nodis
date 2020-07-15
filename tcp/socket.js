@@ -2,6 +2,7 @@ const net = require('net')
 const crypto = require('crypto');
 const tools = require('../tools/tools');
 const { readv } = require('fs');
+const NoDefine = require('../tools/define');
 class Socket {
     constructor() {
         
@@ -35,7 +36,8 @@ class Socket {
                     case "check":
                         console.log("resValue.password = ",resValue.password);
                         result = await instance.tcpHandler.checkMd5(resValue.password);
-                        res.value = result;
+                        res.value = result.value;
+                        res.remark = result.remark
                         break;
                     case "addkey":
                         result = await instance.tcpHandler.addNodis(resValue.key,resValue.value,resValue.password);
@@ -54,21 +56,23 @@ class Socket {
                         result = await instance.tcpHandler.findNodis(resValue.key,resValue.password);
                         res.result = result.result;
                         res.remark = result.remark;
-
                         break;
                     
                     case "getall":
                         result = await instance.tcpHandler.getAll(resValue.password);
                         res.result = result.result;
+                        res.remark = result.remark;
                         res.value = result.value;
                         break;
                     case "raise":
                         result = await instance.tcpHandler.raise(resValue.key,resValue.value,resValue.password);
+                        console.log("raise result - ",result);
                         res.result = result.result;
                         res.remark = result.remark;
+                        break;
                     default:
-                        res.result = false;
-                        res.remark = "unknown command";
+                        res.result = NoDefine.errCode["unknown"].code;
+                        res.remark = NoDefine.errCode["unknown"].text;
 
                         break;
                 }

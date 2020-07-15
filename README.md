@@ -4,7 +4,12 @@
 用Node.js实现的Redis
 
 ## 软件架构
-软件架构说明
+语言:Node.js
+
+数据库:MySQL
+
+操作系统：全平台
+
 
 
 ## 命令字格式(Json)
@@ -31,7 +36,8 @@ password:"password"
 ```js
 return
 type:"check"
-value:code
+value:"code"
+remark:"remark"
 ```
 
 ### 3.存入缓存
@@ -46,7 +52,8 @@ password:"password"
 ```js
 return
 type:"addkey"
-value:code
+value:"code"
+remark:"success"
 ```
 
 ### 4.获取元素
@@ -76,7 +83,7 @@ password:"password"
 ```js
 return
 type:"findkey"
-value:code
+value:"code"
 remark:"remark"
 ```
 
@@ -113,7 +120,7 @@ remark:"remark"
 ```
 
 
-### 8.增减少某个key的值
+### 8.减少某个key的值
 
 ```js
 type:"reduce"

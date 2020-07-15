@@ -7,19 +7,24 @@ class TcpManager {
     }
 
     async checkMd5(text) {
+        let resValue = {}
         if(text == undefined)
         {
-            return false;
+            resValue.value = NoDefine.errCode["auth"].code;
+            resValue.remark = NoDefine.errCode["auth"].text;
         }
         let res = await tools.getMd5(text);
         if(res == instance.ini.Nodis.password)
         {
-            return true;
+            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.remark = NoDefine.errCode["succ"].text;
         }
         else
         {
-            return false;
+            resValue.value = NoDefine.errCode["auth"].code;
+            resValue.remark = NoDefine.errCode["auth"].text;
         }
+        return resValue;
     }
 
     //存入新的缓存，但前缀key已存在则会返回false
@@ -27,21 +32,21 @@ class TcpManager {
         let resValue = {};
         if(!this.checkMd5(password))
         {
-            resValue.value = false;
-            resValue.remark = "permission denied";
+            resValue.value = NoDefine.errCode["auth"].code;
+            resValue.remark = NoDefine.errCode["auth"].text;
             return resValue;
         }
         if(instance.nodis.cache[key])   //键值已存在
         {
-            resValue.value = false;
-            resValue.remark = "the key is already exist";
+            resValue.value = NoDefine.errCode["exist"].code;
+            resValue.remark = NoDefine.errCode["exist"].text;
             return resValue;
         }
         else
         {
             instance.nodis.cache[key] = value;
-            resValue.value = true;
-            resValue.remark = "success";
+            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.remark = NoDefine.errCode["succ"].text;
             console.log("目前缓存内容为 ",instance.nodis.cache);
             return resValue;
         }
@@ -53,11 +58,13 @@ class TcpManager {
         
         if(!this.checkMd5(password))
         {
-            res.result = false;
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].code;
         }
         else
         {
-            res.result = true;
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].code;
             res.value = instance.nodis.cache;
         }
         console.log("res = ",res);
@@ -69,22 +76,22 @@ class TcpManager {
         let res = {};
         if(!this.checkMd5(password))
         {
-            res.result = false;
-            res.remark = "permission denied";
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].code;
             res.value = null;
         }
         else
         {
             if(!instance.nodis.cache[key])
             {
-                res.result = false;
-                res.remark = "key not found";
+                res.result = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].code;
                 res.value = null;
             }
             else
             {
-                res.result = true;
-                res.remark = "success";
+                res.result = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].code;
                 res.value = instance.nodis.cache[key];
             }
         }
@@ -98,21 +105,21 @@ class TcpManager {
         let res = {};
         if(!this.checkMd5(password))
         {
-            res.result = false;
-            res.remark = "permission denied";
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].code;
         }
         else
         {
             if(!instance.nodis.cache[key])
             {
-                res.result = false;
-                res.remark = "key not found";
+                res.result = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].code;
 
             }
             else
             {
-                res.result = true;
-                res.remark = "success";
+                res.result = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].code;
 
             }
         }
@@ -125,22 +132,33 @@ class TcpManager {
         let res = {};
         if(!this.checkMd5(password))
         {
-            res.result = false;
-            res.remark = "permission denied";
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].remark;
         }
         else
         {
             let temp = instance.nodis.cache[key];
             if(!temp)
             {
-                res.result = false;
-                res.remark = "key not found";
+                res.result = NoDefine.errCode["none"].code;
+                res.remark = NoDefine.errCode["none"].remark;
             }
             else
             {
-                
+                if(isNaN(instance.nodis.cache[key]))
+                {
+                    res.result = NoDefine.errCode["NaN"].code;
+                    res.remark = NoDefine.errCode["NaN"].remark;
+                }
+                else
+                {
+                    instance.nodis.cache[key] += value;
+                    res.result = NoDefine.errCode["succ"].code;
+                    res.remark = NoDefine.errCode["succ"].remark;
+                }
             }
         }
+        return res;
     }
 }
 

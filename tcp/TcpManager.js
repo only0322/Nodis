@@ -1,6 +1,8 @@
 const moment = require('moment')
 const tools = require('../tools/tools');
 const NoDefine = require('../tools/define');
+const define = require('../tools/define');
+const fs = require('fs');
 class TcpManager {
     constructor() {
         
@@ -193,6 +195,26 @@ class TcpManager {
             }
         }
         return res;
+    }
+
+    //Nodis固化处理
+    async solidNodis() {
+        if(!instance.ini.Nodis.logName)
+        {
+            return ;
+        }
+        let fileNameTemp;
+        if(!instance.ini.Nodis.logNameTemp)
+        {
+            fileNameTemp = instance.ini.Nodis.logName+'.temp';
+        }
+        else
+        {
+            fileNameTemp = instance.ini.Nodis.logNameTemp;
+        }
+        let fileInfo = fs.readFileSync(define.fileName);
+        console.log("fileInfo");
+        
     }
 }
 

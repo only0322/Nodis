@@ -8,6 +8,15 @@ class Socket {
         
     }
     init () {
+        let isSolid = instance.ini.solid.isSolid;
+        let solidTime = instance.ini.solid.setTime;
+        if(isSolid == true)
+        {
+            setInterval(async() => {
+                await instance.tcpHandler.solidNodis();
+            }, solidTime*1000); //按秒进行计算
+        }
+        
         let ip = instance.ini.main.ip;
         let port = instance.ini.main.port;
         this.server = new net.createServer();

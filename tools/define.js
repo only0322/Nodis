@@ -1,15 +1,7 @@
 const os = require('os')
-let type = os.platform();
-let fileName = null;
-if(type == "win32")
-{
-    fileName = instance.ini.logPathWin;
-}
-else
-{
-    fileName = instance.ini.logPathMac;
-}
 
+
+let fileName = null;
 
 const errCode = {
     "succ" : {

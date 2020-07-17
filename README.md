@@ -14,6 +14,8 @@
 
 ## 命令字格式(Json)
 
+命令字格式大小写任意，如ping，PING，Ping。
+
 ### 1.检查版本 
 
 ```js
@@ -136,3 +138,39 @@ result:"code"
 remark:"remark"
 ```
 
+## 配置文件示例
+
+```ini
+[main]
+#Nodis的IP 端口
+ip=127.0.0.1
+port=13000
+
+[mysql]
+#暂时没用
+ip=127.0.0.1
+name=root
+password=123456
+dbname=Nodis
+
+
+[Nodis]
+#Nodis的版本号 ping的时候会返回
+version=V0.0.1
+#用户密码的MD5
+password=E10ADC3949BA59ABBE56E057F20F883E
+
+
+[solid]
+#是否固化
+isSolid=true
+#固化间隔（秒）
+setTime=5
+
+#固化的文件名
+logPathMac=/Users/hideyoshi/Desktop/codes/Nodis/solid.json
+logPathWin=E:\gitee\Nodis\solid.json
+logPathLinux=/Users/hideyoshi/Desktop/codes/Nodis/solid.json
+logName=solid.json
+logNameTemp=solid.json.temp
+```

@@ -1,8 +1,6 @@
 const os = require('os')
 
 
-let fileName = null;
-
 const errCode = {
     "succ" : {
         code : 0,
@@ -33,4 +31,3 @@ const errCode = {
 
 exports.errCode = errCode;
 
-exports.fileName = fileName;

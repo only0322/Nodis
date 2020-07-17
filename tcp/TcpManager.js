@@ -1,11 +1,29 @@
 const moment = require('moment')
 const tools = require('../tools/tools');
 const NoDefine = require('../tools/define');
-const define = require('../tools/define');
 const fs = require('fs');
 class TcpManager {
     constructor() {
         
+    }
+
+    //初始化Nodis
+    async init() {
+        let solidName = instance.solidName;
+        if(!fs.existsSync(solidName+instance.ini.solid.logName))
+        {
+            return;
+        }
+        else
+        {
+            let fileValue = fs.readFileSync(solidName+instance.ini.solid.logName);
+            console.log("fileValue = ",fileValue);
+            let time = instance.ini.solid.setTime;
+            let DeAES = tools.DecryptAES(fileValue,instance.ini.Nodis.password,time);
+            console.log("DeAES = ",DeAES);
+            console.log("固化文件的内容为 ",JSON.parse(DeAES));
+            instance.nodis.cache = JSON.parse(fileValue);
+        }
     }
 
     async checkMd5(text) {
@@ -199,30 +217,42 @@ class TcpManager {
 
     //Nodis固化处理
     async solidNodis() {
-        if(!instance.ini.Nodis.logName)
+        console.log("开始处理Nodis固化逻辑");
+        let solidFileName = instance.solidName;
+        console.log("solidFileName = ",solidFileName);
+        if(!solidFileName)
         {
             return ;
         }
         let fileNameTemp;
-        if(!instance.ini.Nodis.logNameTemp)
+        if(!instance.ini.solid.logNameTemp)
         {
-            fileNameTemp = instance.ini.Nodis.logName+'.temp';
+            fileNameTemp = logName+'.temp';
         }
         else
         {
-            fileNameTemp = instance.ini.Nodis.logNameTemp;
+            fileNameTemp = solidFileName + instance.ini.solid.logNameTemp;
         }
-        if(!define.fileName)
+        let value = instance.nodis.cache;
+        console.log("value = ",value);
+        let cacheValue = instance.nodis.cache
+        if(!cacheValue || JSON.stringify(cacheValue) == "{}")
         {
-            define.fileName = './solid.json';
+            console.log("没有需要的缓存数据");
+            return;
         }
-        if(!fs.existsSync(define.fileName))
+        else
         {
-            fs.writeFileSync(define.fileName,"");
+            let time = instance.ini.solid.setTime;
+            if(!time)
+            {
+                time = 0;
+            }
+            let AESCode = tools.EncryptAES(JSON.stringify(cacheValue),instance.ini.Nodis.password,time);
+            fs.writeFileSync(fileNameTemp,AESCode);
+            fs.renameSync(fileNameTemp,solidFileName + instance.ini.solid.logName);
+            console.log("Nodis缓存成功");
         }
-        let fileInfo = fs.readFileSync(define.fileName);
-        console.log("fileInfo = ",fileInfo);
-        
     }
 }
 

@@ -2,10 +2,28 @@ const net = require('net');
 
 const fs = require('fs');
 const ini = require('ini');
+const os = require('os');
 
-const { fileName } = require('./tools/define');
 
 async function readIni() {
+    let type = os.platform();
+    console.log('type = ',type);
+    let fileName;
+    if(type == "darwin")
+    {
+        fileName = "/Users/hideyoshi/Desktop/codes/Nodis/Nodis.ini";
+
+    }
+    else if(type == "win32")
+    {
+        fileName = "E:/gitee/Nodis/Nodis.ini";
+
+    }
+    else
+    {
+        fileName = "./Nodis.ini"
+
+    }
     let file = fs.readFileSync(fileName);
     var Info = ini.parse(file.toString());
     return Info;

@@ -212,8 +212,16 @@ class TcpManager {
         {
             fileNameTemp = instance.ini.Nodis.logNameTemp;
         }
+        if(!define.fileName)
+        {
+            define.fileName = './solid.json';
+        }
+        if(!fs.existsSync(define.fileName))
+        {
+            fs.writeFileSync(define.fileName,"");
+        }
         let fileInfo = fs.readFileSync(define.fileName);
-        console.log("fileInfo");
+        console.log("fileInfo = ",fileInfo);
         
     }
 }

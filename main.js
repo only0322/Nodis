@@ -44,9 +44,13 @@ async function giveFileName() {
     {
         fileName = "/Users/hideyoshi/Desktop/codes/Nodis/Nodis.ini";
     }
+    else if(type == "win32")
+    {
+        fileName = "E:/gitee/Nodis/Nodis.ini";
+    }
     else
     {
-        fileName = "E:\gitee\Nodis\Nodis.ini";
+        fileName = "./Nodis.ini"
     }
 }
 

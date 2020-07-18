@@ -85,6 +85,12 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
+                    case "trans":
+                        result = await instance.tcpHandler.trans(resValue.commands,resValue.password);
+                        res.result = result.result;
+                        res.remark = result.remark;
+                        break;
+
                     default:
                         res.result = NoDefine.errCode["unknown"].code;
                         res.remark = NoDefine.errCode["unknown"].text;

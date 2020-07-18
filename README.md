@@ -138,6 +138,21 @@ result:"code"
 remark:"remark"
 ```
 
+### 9.开启一段事务
+```js
+type:"trans"
+password:"password"
+commands:"[{type:reduce,key:a,value:b},{type:getall},etc]"
+```
+
+```js
+return 
+type:"trans"
+result:"code"
+remark:"success" or "xxx command error" or "other"
+```
+
+
 ## 配置文件示例
 
 ```ini

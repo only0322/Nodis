@@ -17,11 +17,15 @@ class TcpManager {
         else
         {
             let fileValue = fs.readFileSync(solidName+instance.ini.solid.logName);
-            console.log("fileValue = ",fileValue);
-            let time = instance.ini.solid.setTime;
-            let DeAES = tools.DecryptAES(fileValue,instance.ini.Nodis.password,time);
-            console.log("DeAES = ",DeAES);
-            console.log("固化文件的内容为 ",JSON.parse(DeAES));
+            console.log("fileValue = ",fileValue.toString());
+            if(fileValue.toString() == null ||fileValue.toString() == "")
+            {
+                fileValue = "{}";
+            }
+            // let DeAES = await tools.DecryptAES(fileValue,instance.ini.Nodis.AESKey);
+            // console.log("DeAES = ",DeAES);
+            
+            console.log("固化文件的内容为 ",JSON.parse(fileValue));
             instance.nodis.cache = JSON.parse(fileValue);
         }
     }
@@ -248,13 +252,29 @@ class TcpManager {
             {
                 time = 0;
             }
-            let AESCode = tools.EncryptAES(JSON.stringify(cacheValue),instance.ini.Nodis.password,time);
-            fs.writeFileSync(fileNameTemp,AESCode);
+            //let AESCode = await tools.EncryptAES(JSON.stringify(cacheValue),instance.ini.Nodis.AESKey);
+            fs.writeFileSync(fileNameTemp,cacheValue);
             fs.renameSync(fileNameTemp,solidFileName + instance.ini.solid.logName);
             console.log("Nodis缓存成功");
         }
     }
+
+    //Nodis事务处理
+    async trans(commands,password) {
+        let res = {};
+        if(!this.checkMd5(password))
+        {
+            res.result = NoDefine.errCode["auth"].code;
+            res.remark = NoDefine.errCode["auth"].text;
+        }
+        else
+        {
+            
+        }
+    }
 }
+
+
 
 
 module.exports = TcpManager;

@@ -5,18 +5,18 @@ async function getMd5(text) {
     return result.toUpperCase();
 }
 
-async function DecryptAES(dataStr, key, iv) {
+async function DecryptAES(dataStr, key) {
     let cipherChunks = [];
-    let decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
+    let decipher = crypto.createDecipheriv('aes-128-ecb', key);
     decipher.setAutoPadding(true);
     cipherChunks.push(decipher.update(dataStr, 'base64', 'utf8'));
     cipherChunks.push(decipher.final('utf8'));
     return cipherChunks.join('');
 }
 
-async function EncryptAES(dataStr, key, iv) {
+async function EncryptAES(dataStr, key) {
     let cipherChunks = [];
-    let cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
+    let cipher = crypto.createCipheriv('aes-128-ecb', key);
     cipher.setAutoPadding(true);
     cipherChunks.push(cipher.update(dataStr, 'utf8', 'base64'));
     cipherChunks.push(cipher.final('base64'));

@@ -34,6 +34,14 @@ class Socket {
                 let res = {};
                 res.type = type;
                 type = type.toLowerCase();  //直接转成小写 不管客户端发送是否有问题
+                let temp = instance.tcpHandler.checkMd5(resValue.password);
+                res.value = temp.value;
+                res.remark = temp.remark;
+                if(res.value!=0)
+                {
+                    client.write(JSON.stringify(res));
+                    return;
+                }
                 let result = null;
                 switch (type) {
                     case "ping":
@@ -49,44 +57,44 @@ class Socket {
                         res.remark = result.remark
                         break;
                     case "addkey":
-                        result = await instance.tcpHandler.addNodis(resValue.key,resValue.value,resValue.password);
+                        result = await instance.tcpHandler.addNodis(resValue.key,resValue.value);
                         res.value  = result.value;
                         res.remark = result.remark;
                         break;
 
                     case "getkey":
-                        result = await instance.tcpHandler.getNodis(resValue.key,resValue.password);
+                        result = await instance.tcpHandler.getNodis(resValue.key);
                         res.result = result.result;
                         res.value = result.value;
                         res.remark = result.remark;
                         break;
 
                     case "findkey":
-                        result = await instance.tcpHandler.findNodis(resValue.key,resValue.password);
+                        result = await instance.tcpHandler.findNodis(resValue.key);
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
                     
                     case "getall":
-                        result = await instance.tcpHandler.getAll(resValue.password);
+                        result = await instance.tcpHandler.getAll();
                         res.result = result.result;
                         res.remark = result.remark;
                         res.value = result.value;
                         break;
                     case "raise":
-                        result = await instance.tcpHandler.raise(resValue.key,resValue.value,resValue.password);
+                        result = await instance.tcpHandler.raise(resValue.key,resValue.value);
 
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
                     case "reduce":
-                        result = await instance.tcpHandler.reduce(resValue.key,resValue.value,resValue.password);
+                        result = await instance.tcpHandler.reduce(resValue.key,resValue.value);
 
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
                     case "trans":
-                        result = await instance.tcpHandler.trans(resValue.commands,resValue.password);
+                        result = await instance.tcpHandler.trans(resValue.value);
                         res.result = result.result;
                         res.remark = result.remark;
                         break;

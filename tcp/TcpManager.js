@@ -54,12 +54,7 @@ class TcpManager {
     //存入新的缓存，但前缀key已存在则会返回false
     async addNodis(key,value,password) {
         let resValue = {};
-        if(!this.checkMd5(password))
-        {
-            resValue.value = NoDefine.errCode["auth"].code;
-            resValue.remark = NoDefine.errCode["auth"].text;
-            return resValue;
-        }
+        
         if(instance.nodis.cache[key])   //键值已存在
         {
             resValue.value = NoDefine.errCode["exist"].code;
@@ -80,17 +75,11 @@ class TcpManager {
     async getAll(password) {
         let res = {};
         
-        if(!this.checkMd5(password))
-        {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
-        }
-        else
-        {
-            res.result = NoDefine.errCode["succ"].code;
-            res.remark = NoDefine.errCode["succ"].text;
-            res.value = instance.nodis.cache;
-        }
+
+        res.result = NoDefine.errCode["succ"].code;
+        res.remark = NoDefine.errCode["succ"].text;
+        res.value = instance.nodis.cache;
+        
         console.log("res = ",res);
         return res;
     }
@@ -98,124 +87,99 @@ class TcpManager {
     //获取键值
     async getNodis(key,password) {
         let res = {};
-        if(!this.checkMd5(password))
+
+        if(!instance.nodis.cache[key])
         {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
             res.value = null;
         }
         else
         {
-            if(!instance.nodis.cache[key])
-            {
-                res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].text;
-                res.value = null;
-            }
-            else
-            {
-                res.result = NoDefine.errCode["succ"].code;
-                res.remark = NoDefine.errCode["succ"].text;
-                res.value = instance.nodis.cache[key];
-            }
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
+            res.value = instance.nodis.cache[key];
         }
+        
         console.log("res = ",res);
         return res;
     }
 
 
     //判断键值是否存在
-    async findNodis(key,password) {
+    async findNodis(key) {
         let res = {};
-        if(!this.checkMd5(password))
+
+        if(!instance.nodis.cache[key])
         {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
+
         }
         else
         {
-            if(!instance.nodis.cache[key])
-            {
-                res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].text;
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
 
-            }
-            else
-            {
-                res.result = NoDefine.errCode["succ"].code;
-                res.remark = NoDefine.errCode["succ"].text;
-
-            }
         }
+        
         console.log("res = ",res);
         return res;
     }
 
     //增加某个键值的值
-    async raise(key,value,password) {
+    async raise(key,value) {
         let res = {};
-        if(!this.checkMd5(password))
+
+        let temp = instance.nodis.cache[key];
+        if(!temp)
         {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
         }
         else
         {
-            let temp = instance.nodis.cache[key];
-            if(!temp)
+            if(isNaN(instance.nodis.cache[key]))
             {
-                res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].text;
+                res.result = NoDefine.errCode["NaN"].code;
+                res.remark = NoDefine.errCode["NaN"].text;
             }
             else
             {
-                if(isNaN(instance.nodis.cache[key]))
-                {
-                    res.result = NoDefine.errCode["NaN"].code;
-                    res.remark = NoDefine.errCode["NaN"].text;
-                }
-                else
-                {
-                    instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) + parseFloat(value);
-                    res.result = NoDefine.errCode["succ"].code;
-                    res.remark = NoDefine.errCode["succ"].text;
-                }
+                instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) + parseFloat(value);
+                res.result = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].text;
             }
         }
+        
         return res;
     }
 
     //减少某个键值的值
-    async reduce(key,value,password) {
+    async reduce(key,value) {
         let res = {};
-        if(!this.checkMd5(password))
+
+        let temp = instance.nodis.cache[key];
+        if(!temp)
         {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
         }
         else
         {
-            let temp = instance.nodis.cache[key];
-            if(!temp)
+            if(isNaN(instance.nodis.cache[key]))
             {
-                res.result = NoDefine.errCode["none"].code;
-                res.remark = NoDefine.errCode["none"].text;
+                res.result = NoDefine.errCode["NaN"].code;
+                res.remark = NoDefine.errCode["NaN"].text;
             }
             else
             {
-                if(isNaN(instance.nodis.cache[key]))
-                {
-                    res.result = NoDefine.errCode["NaN"].code;
-                    res.remark = NoDefine.errCode["NaN"].text;
-                }
-                else
-                {
-                    instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) - parseFloat(value);
-                    res.result = NoDefine.errCode["succ"].code;
-                    res.remark = NoDefine.errCode["succ"].text;
-                }
+                instance.nodis.cache[key] = parseFloat(instance.nodis.cache[key]) - parseFloat(value);
+                res.result = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].text;
             }
         }
+        
         return res;
     }
 
@@ -260,17 +224,56 @@ class TcpManager {
     }
 
     //Nodis事务处理
-    async trans(commands,password) {
+    async trans(commands) {
         let res = {};
-        if(!this.checkMd5(password))
+
+        commands = JSON.parse(commands);
+        let flag = 0;           //是否需要回滚
+        let breakFlag = 0;      //是否立即结束事务
+        let temp = instance.nodis.cache;
+
+        let result = null;
+
+        for(let i=0;i<commands.length;i++)
         {
-            res.result = NoDefine.errCode["auth"].code;
-            res.remark = NoDefine.errCode["auth"].text;
+            console.log("commands[i]",commands[i]);
+            let command = commands[i].type.toLowerCase();
+            let value = commands[i].type;
+            let key = commands[i].key;
+            if(breakFlag == 1)
+            {
+                break;
+            }
+            switch (command) {
+                case "ping":
+                case "getall":
+                case "getkey":
+                case "findkey":
+                case "check":
+                    flag = 0;
+                    continue;
+                case "addkey":
+                    result = await this.addNodis()
+                    break;
+                default:
+                    res.result = NoDefine.errCode["unknown"].code;
+                    res.remark = NoDefine.errCode["unknown"].text;
+                    breakFlag = 1;
+                    break;
+            }
         }
-        else
+
+        if(flag == 1)
         {
-            
+            instance.nodis.cache = temp;
         }
+        
+        if(!res.result)
+        {
+            res.result = NoDefine.errCode["nothing"].code;
+            res.remark = NoDefine.errCode["nothing"].text;
+        }
+        return res;
     }
 }
 

@@ -142,7 +142,7 @@ remark:"remark"
 ```js
 type:"trans"
 password:"password"
-commands:"[{type:reduce,key:a,value:b},{type:getall},etc]"
+value:"[{type:reduce,key:a,value:b},{type:getall},etc]"
 ```
 
 ```js

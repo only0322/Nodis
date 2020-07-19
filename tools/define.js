@@ -25,6 +25,10 @@ const errCode = {
     "unknown" : {
         code : 3,
         text: "unknown command",
+    },
+    "nothing" : {
+        code :4,
+        text : "nothing to do",
     }
 
 }

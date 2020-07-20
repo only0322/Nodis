@@ -7,15 +7,15 @@ const errCode = {
         text : "success"
     },
     "auth" : {
-        code : 530,
+        code : 1141,
         text : "permission denied"
     },
     "none" : {
-        code : 404,
+        code : 1133,
         text : "key not found",
     },
     "exist" : {
-        code : 500,
+        code : 1146,
         text : "key already existed"
     },
     "NaN" : {
@@ -23,11 +23,11 @@ const errCode = {
         text : "not a number"
     },
     "unknown" : {
-        code : 3,
+        code : -1,
         text: "unknown command",
     },
     "nothing" : {
-        code :4,
+        code :1,
         text : "in trans nothing to do",
     }
 

@@ -32,10 +32,17 @@ class TcpManager {
 
     async checkMd5(text) {
         let resValue = {}
+        if(instance.ini.Nodis.usePassword ==  false) 
+        {
+            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.remark = NoDefine.errCode["succ"].text;
+            return resValue;
+        }
         if(text == undefined)
         {
             resValue.value = NoDefine.errCode["auth"].code;
             resValue.remark = NoDefine.errCode["auth"].text;
+            return resValue;
         }
         let res = await tools.getMd5(text);
         if(res == instance.ini.Nodis.password)
@@ -52,7 +59,7 @@ class TcpManager {
     }
 
     //存入新的缓存，但前缀key已存在则会返回false
-    async addNodis(key,value,password) {
+    async addNodis(key,value) {
         let resValue = {};
         
         if(instance.nodis.cache[key])   //键值已存在
@@ -72,7 +79,7 @@ class TcpManager {
     }
 
     //获取Nodis所有的缓存数据
-    async getAll(password) {
+    async getAll() {
         let res = {};
         
 
@@ -85,7 +92,7 @@ class TcpManager {
     }
 
     //获取键值
-    async getNodis(key,password) {
+    async getNodis(key) {
         let res = {};
 
         if(!instance.nodis.cache[key])
@@ -238,7 +245,7 @@ class TcpManager {
         {
             console.log("commands[i]",commands[i]);
             let command = commands[i].type.toLowerCase();
-            let value = commands[i].type;
+            let value = commands[i].value;
             let key = commands[i].key;
             if(breakFlag == 1)
             {
@@ -253,12 +260,15 @@ class TcpManager {
                     flag = 0;
                     continue;
                 case "addkey":
-                    result = await this.addNodis(commands[i].key,commands[i].value);
+                    result = await this.addNodis(key,value);
                     if(result.value !=0)
                     {
                         breakFlag = 1;
                         break;
                     }
+                    break;
+                case "raise":
+
                     break;
                 default:
                     res.result = NoDefine.errCode["unknown"].code;

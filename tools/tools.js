@@ -5,6 +5,7 @@ async function getMd5(text) {
     return result.toUpperCase();
 }
 
+//暂时不加密
 async function DecryptAES(dataStr, key) {
     let cipherChunks = [];
     let decipher = crypto.createDecipheriv('aes-128-ecb', key);

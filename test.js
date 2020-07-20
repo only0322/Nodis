@@ -37,7 +37,7 @@ async function init() {
         console.log('已连接到服务器');
         let send = {
             type:"trans",
-            password:"123456",
+            password:"12345",
             // key:"name",
             value:`[{"type":"ping"}]`
         }

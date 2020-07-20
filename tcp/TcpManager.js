@@ -233,7 +233,7 @@ class TcpManager {
         let temp = instance.nodis.cache;
 
         let result = null;
-
+        console.log("commands = ",commands);
         for(let i=0;i<commands.length;i++)
         {
             console.log("commands[i]",commands[i]);
@@ -273,6 +273,7 @@ class TcpManager {
             res.result = NoDefine.errCode["nothing"].code;
             res.remark = NoDefine.errCode["nothing"].text;
         }
+        console.log("res = ",res);
         return res;
     }
 }

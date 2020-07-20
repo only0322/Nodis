@@ -253,7 +253,12 @@ class TcpManager {
                     flag = 0;
                     continue;
                 case "addkey":
-                    result = await this.addNodis()
+                    result = await this.addNodis(commands[i].key,commands[i].value);
+                    if(result.value !=0)
+                    {
+                        breakFlag = 1;
+                        break;
+                    }
                     break;
                 default:
                     res.result = NoDefine.errCode["unknown"].code;
@@ -266,6 +271,12 @@ class TcpManager {
         if(flag == 1)
         {
             instance.nodis.cache = temp;
+        }
+
+        if(breakFlag == 0)
+        {
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
         }
         
         if(!res.result)

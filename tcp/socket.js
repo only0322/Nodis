@@ -34,7 +34,8 @@ class Socket {
                 let res = {};
                 res.type = type;
                 type = type.toLowerCase();  //直接转成小写 不管客户端发送是否有问题
-                let temp = instance.tcpHandler.checkMd5(resValue.password);
+                let temp = await instance.tcpHandler.checkMd5(resValue.password);
+                console.log("temp = ",temp);
                 res.value = temp.value;
                 res.remark = temp.remark;
                 if(res.value!=0)

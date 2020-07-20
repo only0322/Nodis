@@ -28,7 +28,7 @@ const errCode = {
     },
     "nothing" : {
         code :4,
-        text : "nothing to do",
+        text : "in trans nothing to do",
     }
 
 }

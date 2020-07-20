@@ -37,9 +37,9 @@ async function init() {
         console.log('已连接到服务器');
         let send = {
             type:"trans",
-            password:"12345",
+            password:"123456",
             // key:"name",
-            value:`[{"type":"ping"}]`
+            value:`[{"type":"ping"},{"type":"addkey","key":"name","value":"123"}]`
         }
         client.write(JSON.stringify(send));
         

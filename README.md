@@ -25,7 +25,7 @@ type:"ping"
 ```js
 return
 type:"ping"
-value:"version"
+result:"version"
 ```
 
 ### 2.检查权限
@@ -38,14 +38,14 @@ password:"password"
 ```js
 return
 type:"check"
-value:"code"
+result:"code"
 remark:"remark"
 ```
 
 ### 3.存入缓存
 
 ```js
-type:"addkey"
+type:"add"
 key:"key"       
 value:"value"
 password:"password"
@@ -53,22 +53,22 @@ password:"password"
 
 ```js
 return
-type:"addkey"
-value:"code"
+type:"add"
+result:"code"
 remark:"success"
 ```
 
 ### 4.获取元素
 
 ```js
-type:"getkey"
+type:"get"
 key:"key"
 password:"password"
 ```
 
 ```js
 return 
-type:"getkey"
+type:"get"
 value:"json"
 result:"code"
 remark:"remark"
@@ -77,14 +77,14 @@ remark:"remark"
 ### 5.寻找元素是否存在
 
 ```js
-type:"findkey"
+type:"find"
 key:"key"
 password:"password"
 ```
 
 ```js
 return
-type:"findkey"
+type:"find"
 value:"code"
 remark:"remark"
 ```
@@ -150,6 +150,33 @@ return
 type:"trans"
 result:"code"
 remark:"success" or "xxx command error" or "other"
+```
+### 10.删除某个缓存的内容
+```js
+type:"delete"
+password:"password"
+key:"key"
+```
+
+```js
+return
+type:"delete"
+result:"code"
+remark:"remark"
+```
+
+### 11.更新某个key的值
+```js
+type："update"
+password:"password"
+key:"key"
+value:"value"
+```
+```js 
+return
+type："update"
+result:"code"
+remark:"remark"
 ```
 
 

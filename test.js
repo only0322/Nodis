@@ -36,10 +36,12 @@ async function init() {
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
         let send = {
-            type:"trans",
+            type:"getall",
             password:"123456",
             // key:"name",
-            value:`[{"type":"ping"},{"type":"addkey","key":"name","value":"123"}]`
+            
+            
+            //value:`[{"type":"ping"},{"type":"addkey","key":"name","value":"123"},{"type":"raise","key":"name","value":"100"}]`
         }
         client.write(JSON.stringify(send));
         

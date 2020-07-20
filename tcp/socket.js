@@ -47,30 +47,35 @@ class Socket {
                 switch (type) {
                     case "ping":
                         //版本查询
-                        res.value = "Nodis "+instance.ini.Nodis.version;
+                        res.result = "Nodis "+instance.ini.Nodis.version;
                         console.log("返回值为",res);
                         
                         break;
                     case "check":
-                        console.log("resValue.password = ",resValue.password);
+
                         result = await instance.tcpHandler.checkMd5(resValue.password);
                         res.value = result.value;
                         res.remark = result.remark
                         break;
-                    case "addkey":
+                    case "add":
                         result = await instance.tcpHandler.addNodis(resValue.key,resValue.value);
-                        res.value  = result.value;
+                        res.result  = result.result;
                         res.remark = result.remark;
                         break;
 
-                    case "getkey":
+                    case "update":
+                        result = await instance.tcpHandler.update(resValue.key,resValue.value);
+                        res.result  = result.result;
+                        res.remark = result.remark;
+                        break;
+                    case "get":
                         result = await instance.tcpHandler.getNodis(resValue.key);
                         res.result = result.result;
                         res.value = result.value;
                         res.remark = result.remark;
                         break;
 
-                    case "findkey":
+                    case "find":
                         result = await instance.tcpHandler.findNodis(resValue.key);
                         res.result = result.result;
                         res.remark = result.remark;
@@ -94,6 +99,11 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
+                    case "delete":
+                        result = await instance.tcpHandler.delete(resValue.key);
+                        res.result = result.result;
+                        res.remark = result.remark;
+                        break;
                     case "trans":
                         result = await instance.tcpHandler.trans(resValue.value);
                         res.result = result.result;
@@ -106,6 +116,7 @@ class Socket {
 
                         break;
                 }
+                console.log("返回的res = ",res);
                 client.write(JSON.stringify(res));
 
                 

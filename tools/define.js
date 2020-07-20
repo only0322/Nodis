@@ -14,13 +14,17 @@ const errCode = {
         code : 1133,
         text : "key not found",
     },
+    "add" : {
+        code : 100,
+        text: "[update] not found and add the key",
+    },
     "exist" : {
         code : 1146,
         text : "key already existed"
     },
     "NaN" : {
         code : 200,
-        text : "not a number"
+        text : "value is not a number"
     },
     "unknown" : {
         code : -1,
@@ -28,7 +32,11 @@ const errCode = {
     },
     "nothing" : {
         code :1,
-        text : "in trans nothing to do",
+        text : "in transaction nothing to do",
+    },
+    "lock" : {
+        code :1065,
+        text: "the operation has been locked",
     }
 
 }

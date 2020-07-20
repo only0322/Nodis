@@ -34,20 +34,20 @@ class TcpManager {
         let resValue = {}
         if(instance.ini.Nodis.usePassword ==  false) 
         {
-            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.result = NoDefine.errCode["succ"].code;
             resValue.remark = NoDefine.errCode["succ"].text;
             return resValue;
         }
         if(text == undefined)
         {
-            resValue.value = NoDefine.errCode["auth"].code;
+            resValue.result = NoDefine.errCode["auth"].code;
             resValue.remark = NoDefine.errCode["auth"].text;
             return resValue;
         }
         let res = await tools.getMd5(text);
         if(res == instance.ini.Nodis.password)
         {
-            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.result = NoDefine.errCode["succ"].code;
             resValue.remark = NoDefine.errCode["succ"].text;
         }
         else
@@ -64,14 +64,14 @@ class TcpManager {
         
         if(instance.nodis.cache[key])   //键值已存在
         {
-            resValue.value = NoDefine.errCode["exist"].code;
+            resValue.result = NoDefine.errCode["exist"].code;
             resValue.remark = NoDefine.errCode["exist"].text;
             return resValue;
         }
         else
         {
             instance.nodis.cache[key] = value;
-            resValue.value = NoDefine.errCode["succ"].code;
+            resValue.result = NoDefine.errCode["succ"].code;
             resValue.remark = NoDefine.errCode["succ"].text;
             console.log("目前缓存内容为 ",instance.nodis.cache);
             return resValue;
@@ -87,7 +87,7 @@ class TcpManager {
         res.remark = NoDefine.errCode["succ"].text;
         res.value = instance.nodis.cache;
         
-        console.log("res = ",res);
+        console.log("getAll res = ",res);
         return res;
     }
 
@@ -230,13 +230,48 @@ class TcpManager {
         }
     }
 
+    //删除某个键值
+    async delete(key) {
+        let res = {};
+        if(!instance.nodis.cache[key])
+        {
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
+        }
+        else
+        {
+            delete instance.nodis.cache[key];
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
+        }
+        return res;
+    }
+
+    //更新某个键
+    async update(key,value) {
+        let res = {};
+        if(!instance.nodis.cache[key])
+        {
+            res.result = NoDefine.errCode["add"].code;
+            res.remark = NoDefine.errCode["add"].text;
+            instance.nodis.cache[key] = value;
+        }
+        else
+        {
+            instance.nodis.cache[key] = value;
+            res.result = NoDefine.errCode["succ"].code;
+            res.remark = NoDefine.errCode["succ"].text;
+        }
+        
+        return res;
+    }
+
     //Nodis事务处理
     async trans(commands) {
         let res = {};
 
         commands = JSON.parse(commands);
-        let flag = 0;           //是否需要回滚
-        let breakFlag = 0;      //是否立即结束事务
+        let breakFlag = 0;      //是否立即结束事务 并且进行回滚
         let temp = instance.nodis.cache;
 
         let result = null;
@@ -257,18 +292,43 @@ class TcpManager {
                 case "getkey":
                 case "findkey":
                 case "check":
-                    flag = 0;
+
                     continue;
                 case "addkey":
                     result = await this.addNodis(key,value);
                     if(result.value !=0)
                     {
                         breakFlag = 1;
-                        break;
+                        res.result = result.result;
+                        res.remark = result.remark;
                     }
                     break;
                 case "raise":
-
+                    result = await this.raise(key,value);
+                    if(result.value !=0)
+                    {
+                        breakFlag = 1;
+                        res.result = result.result;
+                        res.remark = result.remark;
+                    }
+                    break;
+                case "reduce":
+                    result = await this.reduce(key,value);
+                    if(result.value !=0)
+                    {
+                        breakFlag = 1;
+                        res.result = result.result;
+                        res.remark = result.remark;
+                    }
+                    break;
+                case "delete":
+                    result = await this.delete(key);
+                    if(result.value !=0)
+                    {
+                        breakFlag = 1;
+                        res.result = result.result;
+                        res.remark = result.remark;
+                    }
                     break;
                 default:
                     res.result = NoDefine.errCode["unknown"].code;
@@ -277,19 +337,19 @@ class TcpManager {
                     break;
             }
         }
-
-        if(flag == 1)
-        {
-            instance.nodis.cache = temp;
-        }
-
+        console.log("res first = ",res);
+        //成功即结束 失败需要回滚
         if(breakFlag == 0)
         {
             res.result = NoDefine.errCode["succ"].code;
             res.remark = NoDefine.errCode["succ"].text;
         }
+        else
+        {
+            instance.nodis.cache = temp;
+        }
         
-        if(!res.result)
+        if(res.result!==0 && !res.result)
         {
             res.result = NoDefine.errCode["nothing"].code;
             res.remark = NoDefine.errCode["nothing"].text;

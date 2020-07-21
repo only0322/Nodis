@@ -109,6 +109,8 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
+                    case "lock":
+                        
 
                     default:
                         res.result = NoDefine.errCode["unknown"].code;

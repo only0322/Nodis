@@ -110,7 +110,9 @@ class Socket {
                         res.remark = result.remark;
                         break;
                     case "lock":
-                        
+                        result = await instance.tcpHandler.getLock(resValue.key);
+                        res.result = result.result;
+                        res.remark = result.remark;
 
                     default:
                         res.result = NoDefine.errCode["unknown"].code;

@@ -357,6 +357,13 @@ class TcpManager {
         console.log("res = ",res);
         return res;
     }
+
+    //上锁
+    async setlock(key) {
+        
+    }
+
+
 }
 
 

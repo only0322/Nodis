@@ -179,6 +179,21 @@ result:"code"
 remark:"remark"
 ```
 
+### 12.上锁
+```js
+type:"setlock"
+password:"password"
+key:"key"
+value:"time"
+```
+```js
+return 
+type:"setlock"
+result:"code"
+remark:"remark"
+```
+
+
 
 ## 配置文件示例
 

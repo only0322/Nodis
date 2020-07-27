@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { resolve } = require('path');
 
 async function getMd5(text) {
     let result = crypto.createHash('md5').update(text).digest("hex");
@@ -24,6 +25,16 @@ async function EncryptAES(dataStr, key) {
     return cipherChunks.join('');
 }
 
+async function sleep(time) {
+    let promise = new Promise(function(resolve,reject) {
+        setTimeout(() => {
+            resolve();
+        }, time*1000);
+    }) 
+    return promise;
+}
+
 exports.DecryptAES = DecryptAES;
 exports.EncryptAES = EncryptAES;
 exports.getMd5 = getMd5;
+exports.sleep = sleep;

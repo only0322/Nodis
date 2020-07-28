@@ -36,10 +36,10 @@ async function init() {
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
         let send = {
-            type:"getall",
+            type:"setlock",
             password:"123456",
-            // key:"name",
-            
+            key:"name",
+            value:"100",
             
             //value:`[{"type":"ping"},{"type":"addkey","key":"name","value":"123"},{"type":"raise","key":"name","value":"100"}]`
         }

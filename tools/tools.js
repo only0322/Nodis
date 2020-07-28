@@ -29,12 +29,27 @@ async function sleep(time) {
     let promise = new Promise(function(resolve,reject) {
         setTimeout(() => {
             resolve();
-        }, time*1000);
+        }, time);
     }) 
     return promise;
+}
+
+
+//判断obj在不在数组arr中
+function contains(arr, obj) {
+    var i = arr.length;
+    while (i--) {
+        
+        if (arr[i] === obj||arr[i]===obj.toUpperCase()) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 exports.DecryptAES = DecryptAES;
 exports.EncryptAES = EncryptAES;
 exports.getMd5 = getMd5;
 exports.sleep = sleep;
+exports.contains = contains;

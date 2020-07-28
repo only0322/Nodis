@@ -36,14 +36,16 @@ class Socket {
                 type = type.toLowerCase();  //直接转成小写 不管客户端发送是否有问题
                 let temp = await instance.tcpHandler.checkMd5(resValue.password);
                 console.log("temp = ",temp);
-                res.value = temp.value;
+                res.result = temp.result;
                 res.remark = temp.remark;
-                if(res.value!=0)
+
+                if(res.result!=0)        //报错直接返回了
                 {
                     client.write(JSON.stringify(res));
                     return;
                 }
                 let result = null;
+                console.log("type = ",type);
                 switch (type) {
                     case "ping":
                         //版本查询
@@ -109,11 +111,12 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
-                    case "lock":
-                        result = await instance.tcpHandler.getLock(resValue.key);
+                    case "setlock":
+                        result = await instance.tcpHandler.setlock(resValue.key);
+                        console.log("result = ",result);
                         res.result = result.result;
                         res.remark = result.remark;
-
+                        break;
                     default:
                         res.result = NoDefine.errCode["unknown"].code;
                         res.remark = NoDefine.errCode["unknown"].text;

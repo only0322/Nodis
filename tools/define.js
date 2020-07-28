@@ -37,6 +37,10 @@ const errCode = {
     "lock" : {
         code :1065,
         text: "the operation has been locked",
+    },
+    "timeout" : {
+        code : 2000,
+        text : "wait for lock timeout",
     }
 
 }

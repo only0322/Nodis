@@ -224,7 +224,7 @@ class TcpManager {
                 time = 0;
             }
             //let AESCode = await tools.EncryptAES(JSON.stringify(cacheValue),instance.ini.Nodis.AESKey);
-            fs.writeFileSync(fileNameTemp,cacheValue);
+            fs.writeFileSync(fileNameTemp,JSON.stringify(cacheValue));
             fs.renameSync(fileNameTemp,solidFileName + instance.ini.solid.logName);
             console.log("Nodis缓存成功");
         }
@@ -360,7 +360,38 @@ class TcpManager {
 
     //上锁
     async setlock(key) {
-        
+        let res = {};
+        if(!instance.nodis.cache[key])
+        {
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
+        }
+        else
+        {
+            let ms = instance.ini.lock.ms;
+            let trys = instance.ini.lock.trys;
+            for(let i=0;i<trys;i++)
+            {
+                if(tools.contains(instance.nodis.lock,key))
+                {
+                    await tools.sleep(ms);
+                }
+                else
+                {
+                    instance.nodis.lock.push(key);
+                    res.result = NoDefine.errCode["succ"].code;
+                    res.remark = NoDefine.errCode["succ"].text;
+                    break;
+                }
+                if(i == trys - 1)
+                {
+                    res.result = NoDefine.errCode["timeout"].code;
+                    res.remark = NoDefine.errCode["timeout"].text;
+                }
+            }
+        }
+        console.log("res = ",res);
+        return res;
     }
 
 

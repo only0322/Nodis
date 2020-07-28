@@ -167,14 +167,14 @@ remark:"remark"
 
 ### 11.更新某个key的值
 ```js
-type："update"
+type:"update"
 password:"password"
 key:"key"
 value:"value"
 ```
 ```js 
 return
-type："update"
+type:"update"
 result:"code"
 remark:"remark"
 ```
@@ -216,18 +216,34 @@ dbname=Nodis
 version=V0.0.1
 #用户密码的MD5
 password=E10ADC3949BA59ABBE56E057F20F883E
+#是否需要密码
+usePassword=true
+
+#AESKey=9cd5b4cf899492077b4a125a79af8e76
+#AESiv=e6db271db12d4d47
 
 
 [solid]
 #是否固化
 isSolid=true
 #固化间隔（秒）
-setTime=5
+setTime=3
+#固化的文件路径
+logPathMac=/Users/hideyoshi/Desktop/codes/Nodis/
+logPathWin=E:/gitee/Nodis/
+logPathDef=./
 
 #固化的文件名
-logPathMac=/Users/hideyoshi/Desktop/codes/Nodis/solid.json
-logPathWin=E:\gitee\Nodis\solid.json
-logPathLinux=/Users/hideyoshi/Desktop/codes/Nodis/solid.json
 logName=solid.json
 logNameTemp=solid.json.temp
+
+#useEncrypt=true
+
+[lock]
+#在无法得到锁的时候尝试多少次
+trys=10
+#每次尝试的时间间隔
+ms=300
+#是否启用锁
+uselock=true
 ```

@@ -184,7 +184,6 @@ remark:"remark"
 type:"setlock"
 password:"password"
 key:"key"
-value:"time"
 ```
 ```js
 return 
@@ -193,7 +192,18 @@ result:"code"
 remark:"remark"
 ```
 
+### 13.释放锁
+```js
+type:"getlock"
+password:"password"
+key:"key"
+```
 
+```js
+return
+type:"getlock"
+result:"code"
+remark:"remark""
 
 ## 配置文件示例
 

@@ -226,7 +226,7 @@ class TcpManager {
             //let AESCode = await tools.EncryptAES(JSON.stringify(cacheValue),instance.ini.Nodis.AESKey);
             fs.writeFileSync(fileNameTemp,JSON.stringify(cacheValue));
             fs.renameSync(fileNameTemp,solidFileName + instance.ini.solid.logName);
-            console.log("Nodis缓存成功");
+            console.log("Nodis固化成功");
         }
     }
 
@@ -391,6 +391,31 @@ class TcpManager {
             }
         }
         console.log("res = ",res);
+        return res;
+    }
+
+
+    //释放锁
+    async getlock(key) {
+        let res = {};
+        if(!tools.contains(instance.nodis.lock,key))
+        {
+            res.result = NoDefine.errCode["none"].code;
+            res.remark = NoDefine.errCode["none"].text;
+        }
+        else
+        {
+            for(let i=0;i<instance.nodis.lock.length;i++)
+            {
+                if(instance.nodis.lock[i] == key)
+                {
+                    instance.nodis.lock.splice(i,1);
+                    res.result = NoDefine.errCode["succ"].code;
+                    res.remark = NoDefine.errCode["succ"].text;
+                }
+
+            }
+        }
         return res;
     }
 

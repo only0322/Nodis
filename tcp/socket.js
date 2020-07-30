@@ -117,6 +117,12 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
+                    case "getlock":
+                        result = await instance.tcpHandler.getlock(resValue.key);
+                        console.log("result = ",result);
+                        res.result = result.result;
+                        res.remark = result.remark;
+                        break;
                     default:
                         res.result = NoDefine.errCode["unknown"].code;
                         res.remark = NoDefine.errCode["unknown"].text;

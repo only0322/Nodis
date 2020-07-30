@@ -36,7 +36,7 @@ async function init() {
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
         let send = {
-            type:"setlock",
+            type:"getlock",
             password:"123456",
             key:"name",
             value:"100",

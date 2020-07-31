@@ -123,6 +123,12 @@ class Socket {
                         res.result = result.result;
                         res.remark = result.remark;
                         break;
+                    case "clearlock":
+                        result = await instance.tcpHandler.clearlock();
+                        console.log("result = ",result);
+                        res.result = result.result;
+                        res.remark = result.remark;
+                        break;
                     default:
                         res.result = NoDefine.errCode["unknown"].code;
                         res.remark = NoDefine.errCode["unknown"].text;

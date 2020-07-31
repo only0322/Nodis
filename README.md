@@ -206,6 +206,18 @@ result:"code"
 remark:"remark""
 ```
 
+### 14.清空锁
+```js
+type:"clearlock"
+password:"password"
+```
+```js
+return
+type:"clearlock"
+result:"code"
+remark:"remark"
+```
+
 ## 配置文件示例
 
 ```ini

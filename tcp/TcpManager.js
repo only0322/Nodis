@@ -61,11 +61,16 @@ class TcpManager {
     //存入新的缓存，但前缀key已存在则会返回false
     async addNodis(key,value) {
         let resValue = {};
-        
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         if(instance.nodis.cache[key])   //键值已存在
         {
             resValue.result = NoDefine.errCode["exist"].code;
             resValue.remark = NoDefine.errCode["exist"].text;
+            await this.getlock(key);
             return resValue;
         }
         else
@@ -73,6 +78,7 @@ class TcpManager {
             instance.nodis.cache[key] = value;
             resValue.result = NoDefine.errCode["succ"].code;
             resValue.remark = NoDefine.errCode["succ"].text;
+            await this.getlock(key);
             console.log("目前缓存内容为 ",instance.nodis.cache);
             return resValue;
         }
@@ -81,7 +87,12 @@ class TcpManager {
     //获取Nodis所有的缓存数据
     async getAll() {
         let res = {};
-        
+        if(instance.nodis.lock.length!=0)
+        {
+            res.result = NoDefine.errCode["timeout"].code;
+            res.remark = NoDefine.errCode["timeout"].text;
+            return res;
+        }
 
         res.result = NoDefine.errCode["succ"].code;
         res.remark = NoDefine.errCode["succ"].text;
@@ -94,18 +105,25 @@ class TcpManager {
     //获取键值
     async getNodis(key) {
         let res = {};
-
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         if(!instance.nodis.cache[key])
         {
             res.result = NoDefine.errCode["none"].code;
             res.remark = NoDefine.errCode["none"].text;
+            await this.getlock(key);
             res.value = null;
         }
         else
         {
             res.result = NoDefine.errCode["succ"].code;
             res.remark = NoDefine.errCode["succ"].text;
+            
             res.value = instance.nodis.cache[key];
+            await this.getlock(key);
         }
         
         console.log("res = ",res);
@@ -116,20 +134,26 @@ class TcpManager {
     //判断键值是否存在
     async findNodis(key) {
         let res = {};
+        
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
 
         if(!instance.nodis.cache[key])
         {
             res.result = NoDefine.errCode["none"].code;
             res.remark = NoDefine.errCode["none"].text;
-
+            
         }
         else
         {
             res.result = NoDefine.errCode["succ"].code;
             res.remark = NoDefine.errCode["succ"].text;
-
+            
         }
-        
+        await this.getlock(key);
         console.log("res = ",res);
         return res;
     }
@@ -137,7 +161,11 @@ class TcpManager {
     //增加某个键值的值
     async raise(key,value) {
         let res = {};
-
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         let temp = instance.nodis.cache[key];
         if(!temp)
         {
@@ -158,14 +186,18 @@ class TcpManager {
                 res.remark = NoDefine.errCode["succ"].text;
             }
         }
-        
+        await this.getlock(key);
         return res;
     }
 
     //减少某个键值的值
     async reduce(key,value) {
         let res = {};
-
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         let temp = instance.nodis.cache[key];
         if(!temp)
         {
@@ -186,7 +218,7 @@ class TcpManager {
                 res.remark = NoDefine.errCode["succ"].text;
             }
         }
-        
+        await this.getlock(key);
         return res;
     }
 
@@ -233,6 +265,11 @@ class TcpManager {
     //删除某个键值
     async delete(key) {
         let res = {};
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         if(!instance.nodis.cache[key])
         {
             res.result = NoDefine.errCode["none"].code;
@@ -244,12 +281,18 @@ class TcpManager {
             res.result = NoDefine.errCode["succ"].code;
             res.remark = NoDefine.errCode["succ"].text;
         }
+        await this.getlock(key);
         return res;
     }
 
     //更新某个键
     async update(key,value) {
         let res = {};
+        let result = await this.setlock(key);
+        if(result.result!=0)
+        {
+            return result;
+        }
         if(!instance.nodis.cache[key])
         {
             res.result = NoDefine.errCode["add"].code;
@@ -262,7 +305,7 @@ class TcpManager {
             res.result = NoDefine.errCode["succ"].code;
             res.remark = NoDefine.errCode["succ"].text;
         }
-        
+        await this.getlock(key);
         return res;
     }
 
@@ -292,6 +335,8 @@ class TcpManager {
                 case "getkey":
                 case "findkey":
                 case "check":
+                case "getlock":
+                case "setlock":
 
                     continue;
                 case "addkey":
@@ -323,6 +368,15 @@ class TcpManager {
                     break;
                 case "delete":
                     result = await this.delete(key);
+                    if(result.value !=0)
+                    {
+                        breakFlag = 1;
+                        res.result = result.result;
+                        res.remark = result.remark;
+                    }
+                    break;
+                case "update":
+                    result = await this.update(key,value);
                     if(result.value !=0)
                     {
                         breakFlag = 1;
@@ -370,6 +424,17 @@ class TcpManager {
         {
             let ms = instance.ini.lock.ms;
             let trys = instance.ini.lock.trys;
+
+            //防止配置文件错误导致无法使用Nodis
+            if(!ms)
+            {
+                ms = 300;
+            }
+            if(!trys)
+            {
+                trys = 10;
+            }
+
             for(let i=0;i<trys;i++)
             {
                 if(tools.contains(instance.nodis.lock,key))
@@ -381,6 +446,7 @@ class TcpManager {
                     instance.nodis.lock.push(key);
                     res.result = NoDefine.errCode["succ"].code;
                     res.remark = NoDefine.errCode["succ"].text;
+                    console.log("上锁成功,key = ",key);
                     break;
                 }
                 if(i == trys - 1)
@@ -409,16 +475,29 @@ class TcpManager {
             {
                 if(instance.nodis.lock[i] == key)
                 {
+                    console.log("找到锁");
                     instance.nodis.lock.splice(i,1);
                     res.result = NoDefine.errCode["succ"].code;
                     res.remark = NoDefine.errCode["succ"].text;
+                    console.log("解锁成功,key = ",key);
+                    break;
+
                 }
 
             }
         }
+        console.log("res = ",res);
         return res;
     }
 
+    //清空锁
+    async clearlock() {
+        instance.nodis.lock = [];
+        let res = {};
+        res.result = NoDefine.errCode["succ"].code;
+        res.remark = NoDefine.errCode["succ"].text;
+        return res;
+    }
 
 }
 

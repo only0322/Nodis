@@ -40,7 +40,7 @@ const errCode = {
     },
     "timeout" : {
         code : 2000,
-        text : "wait for lock timeout",
+        text : "system busy",
     }
 
 }

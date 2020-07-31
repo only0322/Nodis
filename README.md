@@ -20,6 +20,7 @@
 
 ```js
 type:"ping"
+password:"password"
 ```
 
 ```js

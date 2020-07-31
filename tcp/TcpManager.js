@@ -327,6 +327,7 @@ class TcpManager {
             let key = commands[i].key;
             if(breakFlag == 1)
             {
+                console.log("breakFlag 为1，强制结束事务");
                 break;
             }
             switch (command) {
@@ -337,11 +338,12 @@ class TcpManager {
                 case "check":
                 case "getlock":
                 case "setlock":
-
+                    console.log("trans continue ...")
                     continue;
                 case "addkey":
                     result = await this.addNodis(key,value);
-                    if(result.value !=0)
+                    console.log("addkey result = ",result);
+                    if(result.result !=0)
                     {
                         breakFlag = 1;
                         res.result = result.result;
@@ -350,7 +352,8 @@ class TcpManager {
                     break;
                 case "raise":
                     result = await this.raise(key,value);
-                    if(result.value !=0)
+                    console.log("raise result = ",result);
+                    if(result.result !=0)
                     {
                         breakFlag = 1;
                         res.result = result.result;
@@ -359,7 +362,8 @@ class TcpManager {
                     break;
                 case "reduce":
                     result = await this.reduce(key,value);
-                    if(result.value !=0)
+                    console.log("reduce result = ",result);
+                    if(result.result !=0)
                     {
                         breakFlag = 1;
                         res.result = result.result;
@@ -368,7 +372,8 @@ class TcpManager {
                     break;
                 case "delete":
                     result = await this.delete(key);
-                    if(result.value !=0)
+                    console.log("delete result = ",result);
+                    if(result.result !=0)
                     {
                         breakFlag = 1;
                         res.result = result.result;
@@ -377,7 +382,8 @@ class TcpManager {
                     break;
                 case "update":
                     result = await this.update(key,value);
-                    if(result.value !=0)
+                    console.log("update result = ",result);
+                    if(result.result !=0)
                     {
                         breakFlag = 1;
                         res.result = result.result;
@@ -401,9 +407,10 @@ class TcpManager {
         else
         {
             instance.nodis.cache = temp;
+            console.log("回滚")
         }
         
-        if(res.result!==0 && !res.result)
+        if(res.result!=0 && !res.result)
         {
             res.result = NoDefine.errCode["nothing"].code;
             res.remark = NoDefine.errCode["nothing"].text;
@@ -415,47 +422,41 @@ class TcpManager {
     //上锁
     async setlock(key) {
         let res = {};
-        if(!instance.nodis.cache[key])
+        
+        let ms = instance.ini.lock.ms;
+        let trys = instance.ini.lock.trys;
+
+        //防止配置文件错误导致无法使用Nodis
+        if(!ms)
         {
-            res.result = NoDefine.errCode["none"].code;
-            res.remark = NoDefine.errCode["none"].text;
+            ms = 300;
         }
-        else
+        if(!trys)
         {
-            let ms = instance.ini.lock.ms;
-            let trys = instance.ini.lock.trys;
+            trys = 10;
+        }
 
-            //防止配置文件错误导致无法使用Nodis
-            if(!ms)
+        for(let i=0;i<trys;i++)
+        {
+            if(tools.contains(instance.nodis.lock,key))
             {
-                ms = 300;
+                await tools.sleep(ms);
             }
-            if(!trys)
+            else
             {
-                trys = 10;
+                instance.nodis.lock.push(key);
+                res.result = NoDefine.errCode["succ"].code;
+                res.remark = NoDefine.errCode["succ"].text;
+                console.log("上锁成功,key = ",key);
+                break;
             }
-
-            for(let i=0;i<trys;i++)
+            if(i == trys - 1)
             {
-                if(tools.contains(instance.nodis.lock,key))
-                {
-                    await tools.sleep(ms);
-                }
-                else
-                {
-                    instance.nodis.lock.push(key);
-                    res.result = NoDefine.errCode["succ"].code;
-                    res.remark = NoDefine.errCode["succ"].text;
-                    console.log("上锁成功,key = ",key);
-                    break;
-                }
-                if(i == trys - 1)
-                {
-                    res.result = NoDefine.errCode["timeout"].code;
-                    res.remark = NoDefine.errCode["timeout"].text;
-                }
+                res.result = NoDefine.errCode["timeout"].code;
+                res.remark = NoDefine.errCode["timeout"].text;
             }
         }
+        
         console.log("res = ",res);
         return res;
     }

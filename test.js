@@ -30,19 +30,127 @@ async function readIni() {
 }
 
 async function init() {
-
+    var args = process.argv.splice(1);
+    console.log("args = ",args);
     var client = new net.Socket();
+    let send = {};
+    switch (args[1]) {
+        case 'ping':
+            send = {
+                type:"ping",
+                password:"123456",
+            }
+            break;
+        case 'check':
+            send = {
+                type:"check",
+                password:"123456",
+            }
+            break;
+        case 'add':
+            send = {
+                type:"add",
+                password:"123456",
+                key:"A接拉起",
+                value:"404",
+            }
+            break;
+        case 'get':
+            send = {
+                type:"get",
+                password:"123456",
+                key:"A接拉起",
+                value:"404",
+            }
+            break;
+        case 'find':
+            send = {
+                type:"find",
+                password:"123456",
+                key:"A接拉起",
+                value:"404",
+            }
+            break;
+        case 'getall':
+            send = {
+                type:"getall",
+                password:"123456",
+                key:"A接拉起",
+                value:"404",
+            }
+            break;
+        case 'raise':
+            send = {
+                type:"raise",
+                password:"123456",
+                key:"A接拉起",
+                value:"200",
+            }
+            break;
+        case 'reduce':
+            send = {
+                type:"reduce",
+                password:"123456",
+                key:"A接拉起",
+                value:"200",
+            }
+            break;
+        case 'delete':
+            send = {
+                type:"delete",
+                password:"123456",
+                key:"A接拉起",
+                value:"200",
+            }
+            break;
+        case 'update':
+            send = {
+                type:"update",
+                password:"123456",
+                key:"A接拉起",
+                value:"900",
+            }
+            break;
+        case 'setlock':
+            send = {
+                type:"setlock",
+                password:"123456",
+                key:"A接拉起",
+                value:"900",
+            }
+            break;
+        case 'getlock':
+            send = {
+                type:"getlock",
+                password:"123456",
+                key:"A接拉起",
+                value:"900",
+            }
+            break;
+        case 'clearlock':
+            send = {
+                type:"clearlock",
+                password:"123456",
+                key:"A接拉起",
+                value:"900",
+            }
+            break;
+        case 'trans':
+            send = {
+                type:"trans",
+                password:"123456",
+                key:"name",
+                //value:"100",
+                
+                value:`[{"type":"ping"},{"type":"addkey","key":"day","value":"123"},{"type":"raise","key":"day","value":"100"}]`
+            };
+            break;
+        default:
+            break;
+    }
     client.setEncoding('utf8');
     client.connect(instance.ini.main.port, instance.ini.main.ip, function () {
         console.log('已连接到服务器');
-        let send = {
-            type:"trans",
-            password:"123456",
-            key:"name",
-            //value:"100",
-            
-            value:`[{"type":"ping"},{"type":"addkey","key":"day","value":"123"},{"type":"raise","key":"day","value":"100"}]`
-        }
         client.write(JSON.stringify(send));
         
     });

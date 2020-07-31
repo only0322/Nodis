@@ -204,6 +204,7 @@ return
 type:"getlock"
 result:"code"
 remark:"remark""
+```
 
 ## 配置文件示例
 
